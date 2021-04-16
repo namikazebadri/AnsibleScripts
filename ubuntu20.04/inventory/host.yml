@@ -1,0 +1,5 @@
+all:
+  hosts:
+    development_servers:
+      ansible_host: 127.0.0.1 # change this with your server
+      ansible_user: ubuntu
