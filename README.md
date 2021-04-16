@@ -1,6 +1,6 @@
 # Ansible Scripts
 
-This repository contains ansible playbook to install docker, docker-compose and run postgresql from docker-compose.yml file.
+This repository contains ansible playbook to install docker, docker-compose and run any containers from docker-compose.yml files in __compose__ folder.
 
 # Requirements
 
@@ -20,4 +20,4 @@ ansible-playbook -i inventory docker.yml -u ubuntu # change the value for -u par
 
 ## Run Other Containers
 
-You can any other containers listed in the __docker__ folder in this repository. These files are come from [this](https://gist.github.com/namikazebadri) gist.
+You can any other containers listed in the __compose__ folder in this repository. These files are come from [this](https://gist.github.com/namikazebadri) gist.

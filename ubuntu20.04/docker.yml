@@ -64,7 +64,7 @@
 
     - name: Copying docker compose files
       copy:
-        src: ../docker
+        src: ../compose
         dest: /home/ubuntu
         owner: ubuntu
         group: ubuntu
@@ -72,5 +72,5 @@
 
     - name: Run PostgreSQL
       shell: |
-        cd /home/ubuntu/docker/postgresql
+        cd /home/ubuntu/compose/postgresql
         docker-compose up -d
