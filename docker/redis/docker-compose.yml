@@ -1,0 +1,31 @@
+# Redis Server - Cache Server
+version: '3.8'
+
+# Service definition
+services:
+  redis:
+    image: redis:6.0.2
+    container_name: redis
+    volumes:
+      - redisVolume:/data
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.25
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  redisVolume:
+    name: redisVolume

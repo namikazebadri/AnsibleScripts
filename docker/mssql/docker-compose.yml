@@ -1,0 +1,34 @@
+# SQL Server - SQL Database
+version: '3.8'
+
+# Service definition
+services:
+  sqlServerDB:
+    image: microsoft/mssql-server-linux:2017-latest
+    container_name: sqlServerDB
+    volumes:
+      - sqlServerDBVolume:/var/opt/mssql
+      - sqlServerDBVolume:/var/opt/sqlserver
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.4
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "pirloKAKA88"
+      ACCEPT_EULA: Y
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  sqlServerDBVolume:
+    name: sqlServerDBVolume

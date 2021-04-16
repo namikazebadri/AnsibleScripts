@@ -1,0 +1,26 @@
+# Kibana - Tools
+version: '3.8'
+
+# Service definition
+services:
+  kibana:
+    image: kibana:7.11.2
+    container_name: kibana
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.121
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: "http://192.168.2.10:9200"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24

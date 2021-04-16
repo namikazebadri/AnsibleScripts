@@ -1,0 +1,32 @@
+version: '3.8'
+
+# Service definition
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    volumes:
+      - grafanaVolume:/var/lib/grafana
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.223
+    ports:
+      - "6003:3000"
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  grafanaVolume:
+    name: grafanaVolume

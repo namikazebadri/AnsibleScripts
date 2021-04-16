@@ -1,0 +1,29 @@
+# Mockserver
+version: '3.8'
+
+# Service definition
+services:
+  mockServer:
+    image: mockserver/mockserver:latest
+    container_name: mockserver
+    volumes:
+      - /home/ubuntu/mockServer:/config
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.254
+    ports:
+      - "1080:1080"
+    environment:
+      MOCKSERVER_PROPERTY_FILE: "/config/mockserver.properties"
+      MOCKSERVER_INITIALIZATION_JSON_PATH: "/config/initializerJson.json"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24

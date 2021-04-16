@@ -1,0 +1,35 @@
+# Prometheus
+version: '3.8'
+
+# Service definition
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes: 
+      - prometheusVolume:/prometheus
+      - prometheusConfigVolume:/etc/prometheus
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.211
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  prometheusVolume: 
+    name: prometheusVolume
+  prometheusConfigVolume:
+    name: prometheusConfigVolume
+

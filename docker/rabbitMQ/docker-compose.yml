@@ -1,0 +1,34 @@
+version: '3.8'
+
+# Service definition
+services:
+  rabbitMQ:
+    image: rabbitmq:3.8.8-management-alpine
+    container_name: rabbitmq
+    volumes:
+      - rabbitMQVolume:/var/lib/rabbitmq
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.125
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "unisbadri"
+      RABBITMQ_DEFAULT_PASS: "pirloKAKA88"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  rabbitMQVolume:
+    name: rabbitMQVolume

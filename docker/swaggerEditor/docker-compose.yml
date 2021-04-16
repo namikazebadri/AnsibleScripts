@@ -1,0 +1,24 @@
+# Swagger Editor
+version: '3.8'
+
+# Service definition
+services:
+  swaggerEditor:
+    image: swaggerapi/swagger-editor:latest
+    container_name: swaggerEditor
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.250
+    ports:
+      - "1070:8080"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24

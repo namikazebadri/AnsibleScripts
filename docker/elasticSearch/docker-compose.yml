@@ -1,0 +1,32 @@
+# Elasticsearch Server - NoSQL (Search/Index) Database
+version: '3.8'
+
+# Service definition
+services:
+  elasticsearch:
+    image: elasticsearch:7.11.2
+    container_name: elasticSearch
+    volumes:
+      - elasticSearchVolume:/usr/share/elasticsearch/data
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.10
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  elasticSearchVolume:
+    name: elasticSearchVolume

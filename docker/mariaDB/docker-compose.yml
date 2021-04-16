@@ -1,0 +1,33 @@
+# MariaDB Server - SQL Database
+version: '3.8'
+
+# Service definition
+services:
+  mariaDB:
+    image: mariadb:10.5.2
+    container_name: mariaDB
+    volumes:
+      - mariaDBVolume:/var/lib/mysql
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.3
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "pirloKAKA88"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition
+volumes:
+  mariaDBVolume:
+    name: mariaDBVolume

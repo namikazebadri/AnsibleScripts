@@ -1,0 +1,34 @@
+# MongoDB Server - NoSQL (Key-Value) Database
+version: '3.8'
+
+# Service definition
+services:
+  mongoDB:
+    image: mongo:4.2.6
+    container_name: mongoDB
+    volumes:
+      - mongoDBVolume:/data/db
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.11
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "mongo"
+      MONGO_INITDB_ROOT_PASSWORD: "pirloKAKA88"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+# Volume definition 
+volumes:
+  mongoDBVolume:
+    name: mongoDBVolume

@@ -1,0 +1,31 @@
+# Nginx Server - Web Server
+version: '3.8'
+
+# Service definition
+services:
+  nginx:
+    image: nginx:1.19.6
+    container_name: nginx
+    volumes:
+      - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/nginx/sites-available:/etc/nginx/sites-available
+      - /etc/nginx/sites-enabled:/etc/nginx/sites-enabled
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/www:/var/www
+    networks:
+      serviceNetwork:
+        ipv4_address: 192.168.2.200
+    ports:
+      - "80:80"
+        #- "443:443"
+    restart: unless-stopped
+
+# Network definition
+networks:
+  serviceNetwork:
+    name: serviceNetwork
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
