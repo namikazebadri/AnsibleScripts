@@ -35,4 +35,4 @@ ansible-playbook -i inventory \
 
 ## Run Other Containers
 
-You can add any other containers listed in the __compose__ folder in this repository. These files are come from [this](https://gist.github.com/namikazebadri) gist.
+You can run any other containers listed in the __compose__ folder in this repository. These files are coming from [this](https://gist.github.com/namikazebadri) gist.
