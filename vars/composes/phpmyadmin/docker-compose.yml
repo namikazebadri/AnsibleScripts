@@ -5,7 +5,7 @@ version: '3.8'
 services:
   phpMyAdmin:
     image: phpmyadmin/phpmyadmin:latest
-    container_name: phpMyAdmin
+    container_name: phpmyadmin
     networks:
       serviceNetwork:
         ipv4_address: 192.168.2.101

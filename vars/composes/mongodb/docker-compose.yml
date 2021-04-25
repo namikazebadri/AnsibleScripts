@@ -5,7 +5,7 @@ version: '3.8'
 services:
   mongoDB:
     image: mongo:4.2.6
-    container_name: mongoDB
+    container_name: mongodb
     volumes:
       - mongoDBVolume:/data/db
     networks:

@@ -4,7 +4,7 @@ version: '3.8'
 # Service definition
 services:
   dbPostgre:
-    image: postgres:13.1
+    image: postgres:${POSTGRE_TAG}
     container_name: postgresql
     volumes: 
       - postgreVolume:/var/lib/postgresql/data
@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: "pirloKAKA88"
+      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
     restart: unless-stopped
     
 # Network definition

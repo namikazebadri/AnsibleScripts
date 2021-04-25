@@ -5,7 +5,7 @@ version: '3.8'
 services:
   mariaDB:
     image: mariadb:10.5.2
-    container_name: mariaDB
+    container_name: mariadb
     volumes:
       - mariaDBVolume:/var/lib/mysql
     networks:

@@ -5,7 +5,7 @@ version: '3.8'
 services:
   swaggerEditor:
     image: swaggerapi/swagger-editor:latest
-    container_name: swaggerEditor
+    container_name: swaggereditor
     networks:
       serviceNetwork:
         ipv4_address: 192.168.2.250

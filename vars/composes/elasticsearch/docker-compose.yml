@@ -5,7 +5,7 @@ version: '3.8'
 services:
   elasticsearch:
     image: elasticsearch:7.11.2
-    container_name: elasticSearch
+    container_name: elasticsearch
     volumes:
       - elasticSearchVolume:/usr/share/elasticsearch/data
     networks:

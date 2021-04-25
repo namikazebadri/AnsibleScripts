@@ -4,18 +4,18 @@ version: '3.8'
 # Service definition
 services:
   pgAdmin:
-    image: dpage/pgadmin4:4.29
-    container_name: pgAdmin
+    image: dpage/pgadmin4:${PG_ADMIN_TAG}
+    container_name: pgadmin
     volumes: 
       - pgAdminVolume:/var/lib/pgadmin4/storage
     networks:
       serviceNetwork:
         ipv4_address: 192.168.2.200
     ports:
-      - "6000:80"
+      - "5000:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: "unis.badri@elementcreativestudio.com"
-      PGADMIN_DEFAULT_PASSWORD: "pirloKAKA88"
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     restart: unless-stopped
 
 # Network definition
