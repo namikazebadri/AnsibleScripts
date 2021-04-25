@@ -1,7 +1,8 @@
 - hosts: all
   become: yes
-  vars:
-    docker_compose_version: "1.29.1"
+  remote_user: "{{ ansible_user }}"
+  vars_files:
+    - ~/ansible/vars.yml
   tasks:
     - name: Update apt cache
       apt: update_cache=yes cache_valid_time=3600
@@ -45,32 +46,41 @@
 
     - name: Add user to docker group
       user:
-        name: "{{ansible_user}}"
+        name: "{{ ansible_user }}"
         group: docker
+
+    - name: Check docker-compose exists
+      stat: path=/usr/local/bin/docker-compose
+      register: docker_compose_exists
 
     - name: Download docker-compose {{ docker_compose_version }}
       get_url:
-        url : https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
-        dest: ~/docker-compose
-        mode: '+x'
+        url : https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+      when: docker_compose_exists.stat.exists
 
-    - name: Check docker-compose exists
-      stat: path=~/docker-compose
-      register: docker_compose
-
-    - name: Move docker-compose to /usr/local/bin/docker-compose
-      command: mv ~/docker-compose /usr/local/bin/docker-compose
-      when: docker_compose.stat.exists
-
-    - name: Copying docker compose files
+    - name: Copying docker compose files and vaults
       copy:
-        src: ../compose
-        dest: /home/ubuntu
-        owner: ubuntu
-        group: ubuntu
+        src: ../vars
+        dest: /home/{{ ansible_user }}
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_group }}"
         mode: 0755
 
-    - name: Run PostgreSQL
+    - name: Sourcing environment variables
       shell: |
-        cd /home/ubuntu/compose/postgresql
+        source /home/{{ ansible_user }}/vars/vaults/envvars
+      args:
+        executable: /bin/bash
+
+    - name: Run compose file(s)
+      shell: |
+        cd /home/{{ ansible_user }}/vars/composes/{{ item }}
+
+        cp /home/{{ ansible_user }}/vars/vaults/.env ./
+
         docker-compose up -d
+      with_items:
+        - postgresql
+        - pgadmin
