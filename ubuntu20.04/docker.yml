@@ -50,7 +50,8 @@
         group: docker
 
     - name: Check docker-compose exists
-      stat: path=/usr/local/bin/docker-compose
+      stat:
+        path: /usr/local/bin/docker-compose
       register: docker_compose_exists
 
     - name: Download docker-compose {{ docker_compose_version }}
@@ -58,7 +59,7 @@
         url : https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
         dest: /usr/local/bin/docker-compose
         mode: 'u+x,g+x'
-      when: docker_compose_exists.stat.exists
+      when: not docker_compose_exists.stat.exists
 
     - name: Copying docker compose files and vaults
       copy:
