@@ -1,0 +1,101 @@
+- hosts: all
+  become: yes
+  remote_user: "{{ ansible_user }}"
+  vars_files:
+    - ~/ansible/vars_debian.yml
+  tasks:
+    - name: Update the apt package index
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Install packages for apt add repository over HTTPS
+      become: yes
+      apt:
+        name: "{{ packages }}"
+        force_apt_get: yes
+        state: latest
+        update_cache: yes
+      vars:
+        packages:
+          - git
+          - apt-transport-https
+          - ca-certificates
+          - wget
+          - software-properties-common
+          - gnupg2
+          - curl
+
+    - name: Add Apt signing key from official docker repo
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: add docker official repository for Debian Buster
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian buster stable
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        group: docker
+
+    - name: Index new repo into the cache
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Check docker-compose exists
+      stat:
+        path: /usr/local/bin/docker-compose
+      register: docker_compose_exists
+
+    - name: Download docker-compose {{ docker_compose_version }}
+      get_url:
+        url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+      when: not docker_compose_exists.stat.exists
+
+    - name: Copying docker compose files and vaults
+      copy:
+        src: ../vars
+        dest: /home/{{ ansible_user }}
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_group }}"
+        mode: 0755
+
+    - name: Sourcing environment variables
+      shell: |
+        source /home/{{ ansible_user }}/vars/vaults/envvars
+      args:
+        executable: /bin/bash
+
+    - name: Run compose file(s)
+      shell: |
+        cd /home/{{ ansible_user }}/vars/composes/{{ item }}
+
+        cp /home/{{ ansible_user }}/vars/vaults/.env ./
+
+        docker-compose up -d
+      with_items:
+        - postgresql
+        - pgadmin
