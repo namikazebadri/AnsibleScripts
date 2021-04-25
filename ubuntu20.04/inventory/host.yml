@@ -1,5 +1,5 @@
 all:
   hosts:
     dev_servers:
-      ansible_host: 127.0.0.1 # change this with your server ip address or you can use domain name style definition.
+      ansible_host: 0.0.0.0 # change this with your server ip address or you can use domain name style definition.
   children:
