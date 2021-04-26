@@ -1,6 +1,6 @@
 # Ansible Scripts
 
-This repository contains Ansible playbooks to install Docker, Docker Compose and run any containers from docker-compose.yml files in __./vars/composes__ folder.
+This repository Contains Ansible playbooks for CentOS, Debian and Ubuntu. Uses Docker, Docker Compose, Ansible Vault and secure setup for environment variables. Provides a wide range of Docker Compose scripts too, integrated with Ansible Vault for secure variables.
 
 ## Requirements
 
